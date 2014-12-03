@@ -265,7 +265,9 @@ object like this: `{v: 'top', h: 'right'}`.
      * @method open
      */
     open: function() {
+      var old = currentOverlay();
       this.opened = true;
+      if (old) old.close();
     },
 
     /** 
@@ -410,7 +412,7 @@ object like this: `{v: 'top', h: 'right'}`.
         removeOverlay(this);
         if (this.layered) {
           if (!currentOverlay()) {
-            this.layer.opened = this.opened;
+            this.layer.opened = currentOverlay() ? currentOverlay().opened : this.opened;
           }
           this.layer.removeElement(this.target);
         }
@@ -432,7 +434,7 @@ object like this: `{v: 'top', h: 'right'}`.
 
     renderBackdropOpened: function() {
       if (this.backdrop && getBackdrops().length < 2) {
-        this.scrim.classList.toggle('core-opened', this.opened);
+        this.scrim.classList.toggle('core-opened', currentOverlay() ? currentOverlay().opened : this.opened);
       }
     },
 
